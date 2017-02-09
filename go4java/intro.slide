@@ -1,6 +1,6 @@
-Jazyk Go pro vývojáře v Javě
-Prezantace ulehčující lidem přechod z Javy na Golang
-18:00:00 29 Jan 2016
+Golang for Java programmers
+A quick presentation that makes it easy for seasoned Java developers to start programming in Golang
+18:00 29 Jan 2016
 Tags: go, java
 
 Ondřej Linek
@@ -9,8 +9,132 @@ me@ondralinek.cz
 https://go.ondralinek.cz
 @golang_cz
 
-Heading 1
+* What's Golang (Go)
 
-* Title of slide or section (must have asterisk)
+- statically compiled and linked strong typed general purpose languge
+- compiled into a native code (x86, ia64/amd64, ARMvx...)
+- garbage collected memory
+- non-OOP with a hint of functional programming
+- does support pointers but lacks pointer arithemtic
+- doesn't support threads but supports something called >go routines<
+- *opinionated* - and that's apply to pretty all things `Go`
 
-Some Text
+* Go Toolbox
+
+- `go`
+- `go`
+- `go`
+
+- really all you need to have is `go`
+
+* Program structure
+
+- function `main` in the package `main`
+
+.code main/main.go
+
+- `GOPATH` - that's where all your source code lives
+- all your code is stored in packages
+- the main package is special - it indicates a package where an exutable programs are stored
+- unlike Java in Go there's not many packages
+- some use monorepo (company wide) yet you're free to choose
+
+* Recommended program structure
+
+- to treat you application as a library you can follow this structure
+.code structure.md
+
+* What's in Go that's not in Java
+
+- global functions - funtions on the root level
+- pointers - though limited to referencing and de-referencing - once you start using the `unsafe` you can do pointer arithmetic too
+- multiple return values
+- `for` and `if` with initializators
+- type inference
+- deferred statements with the `defer` keyword
+- built-in support for testing (code and tools)
+- built-in support for dependency management with `go get`
+- support for `C` language
+
+* What's in Java that's not in Go
+
+- virtual machine - `Go` compiles into the native code
+- objects - `Go` uses structs but lacks encapsulation, inheritence and polymorhism
+- threads - `Java` supprts threads, `Go` doesn't
+- threalocal - `Go` has no threads and as such can't bind data to them.
+- the ternary operator (`bool ? true : false`)
+- the `while` loop
+- exceptions - `Go` can do `panic` but that's pretty much it
+- generics - no generic types
+- enumerations - but supports constant numerical generators via `iota`
+
+* Multithreading - channels
+
+- `Go` uses so called `go routines`
+- they're lightweight threads, internally an event loop akin to Node.js one. It's kind of cooperative multitasking.
+- to communicate with and between go routines one can use mutexes and channels
+
+.code channels/channels.go
+
+* Multithreading - mutexes
+
+.code mutexes/mutexes.go
+
+* Working with time and intervals
+
+- `time` package
+- time is stored in the `time.Time` struct. Internally it's nanosecond sice 01/01/01 00:00:00 UTC
+- interval are stored in `time.Duration`. It's just a synonym for int64 where 1 means 1 nanosecond
+
+* Enumerations with iota
+
+- `go` has no enumerations but can take advantage of constance numerical sequences
+
+.code iota/iota.go
+
+* Annotation and visibility scope
+
+- Go has no annotations as we knwo them in Java but you can use tags
+.code tags/tags.go
+- each struct field can have multipla tags assigned
+- if you want to read the tag value(s) you can use the `Value` type
+- all variable, strcut, function and interface names starting in lower case are not accessible outside of their package
+
+* JSON
+
+- Go can marshal and unmashal into specific types or into generic types (interface{})
+- the simplest way to marhal JSON is to use `json.Marshal` function
+- the simplest way to unmarshal JSON is to use `json.Unmarshal` function
+- keep in mind that numbers unmarshal into `float64` unless you use specific type
+
+* HTTP
+
+- Go natively supports both HTTP server and client
+- includes full support for SSL/TLS
+- built in support for routing
+- support for testing 
+- and templating
+
+* HTTP server
+
+* HTTP client (including SSL)
+
+* HTTP routing
+
+* Templating 
+
+* Error handling
+
+- Go has no exceptions
+- you have to check return values
+- you can call `panic` but that's more like Java's `Error`.
+
+* Error handling example
+
+.code errors/errors.go
+
+* Přístup k databázi v Go
+
+* Dokumentace kódu v Go
+
+* Testování v Go

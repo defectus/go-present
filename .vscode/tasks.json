@@ -1,0 +1,23 @@
+{
+    "version": "0.1.0",
+    "command": "sh",
+    "args": [
+        "-c"
+    ],
+    "isShellCommand": true,
+    "showOutput": "always",
+    "suppressTaskName": true,
+    "_runner": "terminal",
+    "tasks": [
+        {
+            "taskName": "run",
+            "command": "present -http 127.0.0.1:9091",
+            "isShellCommand": true
+        },        
+        {
+            "taskName": "kill",
+            "command": "kill -9 $(pidof present)",
+            "isShellCommand": true
+        }
+    ]
+}
