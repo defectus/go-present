@@ -26,6 +26,7 @@ https://go.ondralinek.cz
 - `go`
 
 - really all you need to have is `go`
+- but there are tools that can help (`gb` being one of them)
 
 * Program structure
 
@@ -68,23 +69,100 @@ https://go.ondralinek.cz
 - generics - no generic types
 - enumerations - but supports constant numerical generators via `iota`
 
+* Go basics
+
+- if can have intializers `if` `can,err:=canIDoIt();can` `&&` `err` `==` `nil` `{...}`
+- if doesn't have the condition in brackets
+- for looping there's only `for`
+- for can be forever (`for{}`) or conditional `for` `i:=0;i<10;i++`
+- `break` and `continue` works the same
+- function can be variables `fun:=func(){...};fun()` is valid
+- function can return more than one value
+`func()(int,int){return` `1,2}`
+- variable definition with type inference `a:=0` - a is an `int`
+- pointer referencing with `&` and `*`
+- parameters are passed by value
+- _ tells Go to ignore this variable, also used for import for side effects
+
+* Working with pointers
+- to get a pointer to value use `a:=&b`
+- to derefence a pointer use `b=*a`
+- no pointer arithmetic
+.code pointer/pointer.go
+
+* Structs and composition
+- structs can be defined as types or ad-hoc
+- structs can contain as many fields 
+- structs can contain other structs, can compose of other structs
+- definition and assignment can happen in one step
+
+* Struct examples
+
+.code structs/structs.go
+
+* Receivers
+
+- Types can have receivers
+- Receivers are value or pointer based
+- It's much more usual to work with pointers
+
+* Receiver example
+
+.code receivers/receivers.go
+
+* Interfaces
+
+- interfaces make sense with receivers
+- every type can implement an interface
+- interface implementation is implicit - by implementing all functions prescribed by the interface
+- interface implementation is either by pointer or value
+- pointers to interfaces make no sense
+
+* Interface example
+
+.code interfaces/interfaces.go
+
+* Arrays, Slices and Maps
+
+- in Go there are only arrays, slices and Maps
+- arrays are always fixed length
+- slices are dynamic length - i.e. can grow/shirk in runtime
+- maps can contain any type as a value but and compareables as a key
+- to add to a slice use the builtin `append` function
+- to iterate over a slice use the `range` keyword
+- to remove from a map use the `delete` function
+- maps are not thread-safe, use mutexes to modify a map concurrently
+
+* Arrays, Slices and Maps example
+
+.code array/array.go
+
 * Multithreading - channels
 
 - `Go` uses so called `go routines`
 - they're lightweight threads, internally an event loop akin to Node.js one. It's kind of cooperative multitasking.
 - to communicate with and between go routines one can use mutexes and channels
+- to create a channel use the builtin `make` function. note that channels are typed!
+- once you're done with a channel call `close` on it
 
-.code channels/channels.go
+* Multithreading with channels
+
+.code channels1/channels.go
+
+* Multithreading with waitgroups
+
+.code channels2/channels.go
 
 * Multithreading - mutexes
 
-.code mutexes/mutexes.go
+.code mutexes1/mutexes.go
 
 * Working with time and intervals
 
 - `time` package
-- time is stored in the `time.Time` struct. Internally it's nanosecond sice 01/01/01 00:00:00 UTC
+- time is stored in the `time.Time` struct. Internally it's nanosecond since 01/01/01 00:00:00 UTC
 - interval are stored in `time.Duration`. It's just a synonym for int64 where 1 means 1 nanosecond
+- parsing time is done with `time.Parse()`. The layout (format) date is `Mon` `Jan` `2` `15:04:05` `-0700` `MST` `2006`
 
 * Enumerations with iota
 
@@ -94,11 +172,11 @@ https://go.ondralinek.cz
 
 * Annotation and visibility scope
 
-- Go has no annotations as we knwo them in Java but you can use tags
+- Go has no annotations as we know them in Java but you can use tags
 .code tags/tags.go
-- each struct field can have multipla tags assigned
+- each struct field can have multiple tags assigned
 - if you want to read the tag value(s) you can use the `Value` type
-- all variable, strcut, function and interface names starting in lower case are not accessible outside of their package
+- all variable, struct, function and interface names starting in lower case are not accessible outside of their package
 
 * JSON
 
@@ -107,10 +185,16 @@ https://go.ondralinek.cz
 - the simplest way to unmarshal JSON is to use `json.Unmarshal` function
 - keep in mind that numbers unmarshal into `float64` unless you use specific type
 
+* JSON example
+
+.code json/json.go
+
 * HTTP
 
 - Go natively supports both HTTP server and client
 - includes full support for SSL/TLS
+- Go supports keep-alive only when you close response
+- support SSL sessions
 - built in support for routing
 - support for testing 
 - and templating
@@ -119,9 +203,20 @@ https://go.ondralinek.cz
 
 * HTTP client (including SSL)
 
+.code http/client.go
+
 * HTTP routing
 
 * Templating 
+
+- Go has its own templating
+- you can't do sphagety coding (create or call funtions), which is great
+- to access date use place `{{.root}}` or `{{.root.leave}}`
+- to iterate over a map or slice use `{{range $key, $value := .root}}`...`{{end}}`
+
+* Templating example
+
+.code http/template.go
 
 * Error handling
 
@@ -133,8 +228,33 @@ https://go.ondralinek.cz
 
 .code errors/errors.go
 
-* Přístup k databázi v Go
+* Accessing SQL databases in Go
+
+- accessing an SQL database handles the `database/sql` package
+- you have to use drivers to access a specific implementation
+- the `sql` package supports various scenarios out of the box, including transactions
+- in Go you rarely use ORM, result mapping is however a common pattern
+- NoSQL has no standards in Go 
+
+* SQL example
+
+.code sql/sql.go
+
+* SQL mapping example
+
+.code sql/mapping.go
+
+* Testing applications in Go
+
+- Go has a built-in support for testing
+- you don not have to use 3rd party libraries
+- test files end with `_test`.`go`
+- test package may end with `_test` e.g. `main_test`
+- to write a test just create a function with signature `func` `TestWhatever` `(t` `*testing`.`T)` `{}`
+- to run a test in terminal do `go` `test` `name_of_test`.`go` or better yet `go` `test` `./...`
+
+* Testing example
+
+.code test/test_test.go
 
 * Dokumentace kódu v Go
-
-* Testování v Go
