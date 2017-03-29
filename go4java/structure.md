@@ -6,10 +6,13 @@ $GOPATH
             |
             - project name
                 |
-                - optional packages that are shareable (structs, interfaces)
-                - cmd - containt the main function, package name is main
-                - other application specific source files 
-                - more application specific files 
-                - your test files live here too
+                - shared/ optional packages that are shareable (structs, interfaces)
+                - cmd/ 
+                  |
+                  - main.go - containt the main function, package name is main
+                - foo/ other application specific source files 
+                - bar/ more application specific files 
+                - baz.go
+                - baz_test.go your test files live here too
 
                                           

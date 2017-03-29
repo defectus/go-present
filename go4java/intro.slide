@@ -27,6 +27,7 @@ https://go.ondralinek.cz
 
 - really all you need to have is `go`
 - but there are tools that can help (`gb` being one of them)
+- `godoc`, `goftm` are useful too
 
 * Program structure
 
@@ -34,9 +35,11 @@ https://go.ondralinek.cz
 
 .code main/main.go
 
-- `GOPATH` - that's where all your source code lives
+- `$GOPATH` - that's where all your source code lives
 - all your code is stored in packages
-- the main package is special - it indicates a package where an exutable programs are stored
+- the main package is special - it indicates a package where an exutable programs are stored and can't be used from other packages
+- that's why it's common to have a directory called `cmd` with the package `main`
+- package name and directory name are not related (directory `foo` can contain package `bar`)
 - unlike Java in Go there's not many packages
 - some use monorepo (company wide) yet you're free to choose
 
@@ -47,7 +50,7 @@ https://go.ondralinek.cz
 
 * What's in Go that's not in Java
 
-- global functions - funtions on the root level
+- global functions - funtionsa at the root level
 - pointers - though limited to referencing and de-referencing - once you start using the `unsafe` you can do pointer arithmetic too
 - multiple return values
 - `for` and `if` with initializators
@@ -55,34 +58,36 @@ https://go.ondralinek.cz
 - deferred statements with the `defer` keyword
 - built-in support for testing (code and tools)
 - built-in support for dependency management with `go get`
+- all variables are initialized to 0, false, "" or nil
 - support for `C` language
 
 * What's in Java that's not in Go
 
 - virtual machine - `Go` compiles into the native code
 - objects - `Go` uses structs but lacks encapsulation, inheritence and polymorhism
-- threads - `Java` supprts threads, `Go` doesn't
-- threalocal - `Go` has no threads and as such can't bind data to them.
+- threads - `Java` supprts threads, `Go` doesn't (not directly)
+- threadlocal - `Go` has no threads and as such can't bind data to them.
 - the ternary operator (`bool ? true : false`)
 - the `while` loop
 - exceptions - `Go` can do `panic` but that's pretty much it
-- generics - no generic types
+- generics - no generic types, at all
 - enumerations - but supports constant numerical generators via `iota`
 
 * Go basics
 
-- if can have intializers `if` `can,err:=canIDoIt();can` `&&` `err` `==` `nil` `{...}`
-- if doesn't have the condition in brackets
+- `if` can have intializers `if` `can,err:=canIDoIt();can` `&&` `err` `==` `nil` `{...}`
+- `if` doesn't have the condition in brackets
 - for looping there's only `for`
 - for can be forever (`for{}`) or conditional `for` `i:=0;i<10;i++`
-- `break` and `continue` works the same
+- `break` and `continue` work the same
 - function can be variables `fun:=func(){...};fun()` is valid
 - function can return more than one value
 `func()(int,int){return` `1,2}`
 - variable definition with type inference `a:=0` - a is an `int`
 - pointer referencing with `&` and `*`
 - parameters are passed by value
-- _ tells Go to ignore this variable, also used for import for side effects
+- `_` tells Go to ignore this variable, also used for import for side effects
+- unused variables and imports are compilation errors
 
 * Working with pointers
 - to get a pointer to value use `a:=&b`
@@ -91,8 +96,10 @@ https://go.ondralinek.cz
 .code pointer/pointer.go
 
 * Structs and composition
-- structs can be defined as types or ad-hoc
-- structs can contain as many fields 
+- structs are the closest you get classes in Java
+- structs can be defined as types or ad-hoc (anonymous structs)
+- structs can contain as many fields as required
+- structs can have no fields at all
 - structs can contain other structs, can compose of other structs
 - definition and assignment can happen in one step
 
@@ -103,6 +110,7 @@ https://go.ondralinek.cz
 * Receivers
 
 - Types can have receivers
+- They are similar to methods expect the `this` keyword is defined explicitely
 - Receivers are value or pointer based
 - It's much more usual to work with pointers
 
@@ -112,11 +120,13 @@ https://go.ondralinek.cz
 
 * Interfaces
 
+- interfaces prescribe functions only
 - interfaces make sense with receivers
 - every type can implement an interface
 - interface implementation is implicit - by implementing all functions prescribed by the interface
 - interface implementation is either by pointer or value
 - pointers to interfaces make no sense
+- every type implements an empty interface (`interface{}`)
 
 * Interface example
 
@@ -124,7 +134,7 @@ https://go.ondralinek.cz
 
 * Arrays, Slices and Maps
 
-- in Go there are only arrays, slices and Maps
+- in Go there are only arrays, slices and maps
 - arrays are always fixed length
 - slices are dynamic length - i.e. can grow/shirk in runtime
 - maps can contain any type as a value but and compareables as a key
@@ -154,15 +164,19 @@ https://go.ondralinek.cz
 .code channels2/channels.go
 
 * Multithreading - mutexes
+- mutexes are for Go what `synchronized` is for Java
+- don't try to pass mutex around by value - always use references
 
 .code mutexes1/mutexes.go
 
 * Working with time and intervals
 
 - `time` package
-- time is stored in the `time.Time` struct. Internally it's nanosecond since 01/01/01 00:00:00 UTC
+- time is stored in the `time.Time` struct. Internally it's int64 nanosecond since/before 01/01/01 00:00:00 UTC
 - interval are stored in `time.Duration`. It's just a synonym for int64 where 1 means 1 nanosecond
 - parsing time is done with `time.Parse()`. The layout (format) date is `Mon` `Jan` `2` `15:04:05` `-0700` `MST` `2006`
+- to get notified after some time use `time.After(time.Second)`
+- to pause the current go routine use `time.Wait(time.Second)`
 
 * Enumerations with iota
 
@@ -180,10 +194,12 @@ https://go.ondralinek.cz
 
 * JSON
 
-- Go can marshal and unmashal into specific types or into generic types (interface{})
+- built-in, no dependancy required
+- Go can marshal and unmashal into specific types or into generic types (map[string]interface{})
 - the simplest way to marhal JSON is to use `json.Marshal` function
 - the simplest way to unmarshal JSON is to use `json.Unmarshal` function
 - keep in mind that numbers unmarshal into `float64` unless you use specific type
+- implement `json.Mashaller` or `json.Unmarshaller` interface to customize serialization to/from JSON
 
 * JSON example
 
@@ -193,19 +209,27 @@ https://go.ondralinek.cz
 
 - Go natively supports both HTTP server and client
 - includes full support for SSL/TLS
-- Go supports keep-alive only when you close response
-- support SSL sessions
+- support SSL sessions and keep-alive
 - built in support for routing
 - support for testing 
 - and templating
 
 * HTTP server
 
-* HTTP client (including SSL)
+- it is common to launch you own server directly, without any framework
+- routing is probably the only exception
+.code httpServer/server.go
 
+* HTTP client (including SSL)
+- Go supports keep-alive only when you close response body
+- `http.Client` and `http.Transport` are meant to be reused
 .code http/client.go
 
 * HTTP routing
+
+- the only part normally delegated to a library/framwork
+- gorilla mux is a popular choice
+- support wildcards, parameter mappings and more
 
 * Templating 
 
@@ -222,7 +246,8 @@ https://go.ondralinek.cz
 
 - Go has no exceptions
 - you have to check return values
-- you can call `panic` but that's more like Java's `Error`.
+- error return values can be ignored
+- you can call `panic` but that's more like Java's `Error`
 
 * Error handling example
 
@@ -247,7 +272,7 @@ https://go.ondralinek.cz
 * Testing applications in Go
 
 - Go has a built-in support for testing
-- you don not have to use 3rd party libraries
+- you do not have to use 3rd party libraries
 - test files end with `_test`.`go`
 - test package may end with `_test` e.g. `main_test`
 - to write a test just create a function with signature `func` `TestWhatever` `(t` `*testing`.`T)` `{}`
@@ -257,4 +282,11 @@ https://go.ondralinek.cz
 
 .code test/test_test.go
 
-* Dokumentace kódu v Go
+* Documenting code in Go
+
+- documentation is not statically built - it's dynamically served by `godoc`
+- your publicly accessible code can be viewed at http://godoc.org
+- to document a function just write a comment on top of it
+- structs, interfaces and so on follow the suite
+- longer package documentation resides in xxxxx
+- code examples can created with yyyyyy
