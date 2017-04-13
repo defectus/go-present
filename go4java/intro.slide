@@ -12,12 +12,12 @@ https://go.ondralinek.cz
 * What's Golang (Go)
 
 - statically compiled and linked strong typed general purpose languge
-- compiled into a native code (x86, ia64/amd64, ARMvx...)
-- garbage collected memory
+- compiles into native code (x86, ia64/amd64, ARMvx...)
+- garbage collected memory 
 - non-OOP with a hint of functional programming
 - does support pointers but lacks pointer arithemtic
 - doesn't support threads but supports something called >go routines<
-- *opinionated* - and that's apply to pretty all things `Go`
+- *opinionated* - and that applies to pretty all things `Go`
 
 * Go Toolbox
 
@@ -35,9 +35,9 @@ https://go.ondralinek.cz
 
 .code main/main.go
 
-- `$GOPATH` - that's where all your source code lives
+- `$GOPATH` - that's where all your source code lives, if not set it `$HOME/go`
 - all your code is stored in packages
-- the main package is special - it indicates a package where an exutable programs are stored and can't be used from other packages
+- the `main` package is special - it indicates a package where an exutable program is stored and can't be accessed from other packages
 - that's why it's common to have a directory called `cmd` with the package `main`
 - package name and directory name are not related (directory `foo` can contain package `bar`)
 - unlike Java in Go there's not many packages
@@ -50,7 +50,7 @@ https://go.ondralinek.cz
 
 * What's in Go that's not in Java
 
-- global functions - funtionsa at the root level
+- global functions - functions at the root level
 - pointers - though limited to referencing and de-referencing - once you start using the `unsafe` you can do pointer arithmetic too
 - multiple return values
 - `for` and `if` with initializators
@@ -59,13 +59,13 @@ https://go.ondralinek.cz
 - built-in support for testing (code and tools)
 - built-in support for dependency management with `go get`
 - all variables are initialized to 0, false, "" or nil
-- support for `C` language
+- support for the `C` language
 
 * What's in Java that's not in Go
 
-- virtual machine - `Go` compiles into the native code
+- virtual machine - `Go` compiles into native code
 - objects - `Go` uses structs but lacks encapsulation, inheritence and polymorhism
-- threads - `Java` supprts threads, `Go` doesn't (not directly)
+- threads - `Java` supports threads, `Go` doesn't (not directly)
 - threadlocal - `Go` has no threads and as such can't bind data to them.
 - the ternary operator (`bool ? true : false`)
 - the `while` loop
@@ -96,7 +96,7 @@ https://go.ondralinek.cz
 .code pointer/pointer.go
 
 * Structs and composition
-- structs are the closest you get classes in Java
+- structs are the closest you can get to classes in Java
 - structs can be defined as types or ad-hoc (anonymous structs)
 - structs can contain as many fields as required
 - structs can have no fields at all
@@ -216,7 +216,7 @@ https://go.ondralinek.cz
 
 * HTTP server
 
-- it is common to launch you own server directly, without any framework
+- it is common to launch your own server directly, without any framework
 - routing is probably the only exception
 .code httpServer/server.go
 
@@ -235,8 +235,9 @@ https://go.ondralinek.cz
 
 - Go has its own templating
 - you can't do sphagety coding (create or call funtions), which is great
-- to access date use place `{{.root}}` or `{{.root.leave}}`
-- to iterate over a map or slice use `{{range $key, $value := .root}}`...`{{end}}`
+- to access data use `{{.}}` `{{.root}}` or `{{.root.leave}}`
+- to iterate over a map use `{{range $key, $value := .root}}`...`{{end}}`
+- to iterate over a slice use `{{range .root}}`{{.}}`{{end}}`
 
 * Templating example
 
