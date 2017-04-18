@@ -11,7 +11,7 @@ https://go.ondralinek.cz
 
 * What's Golang (Go)
 
-- statically compiled and linked strong typed general purpose languge
+- statically compiled and linked strong typed general purpose language
 - compiles into native code (x86, ia64/amd64, ARMvx...)
 - garbage collected memory 
 - non-OOP with a hint of functional programming
@@ -35,17 +35,18 @@ https://go.ondralinek.cz
 
 .code main/main.go
 
-- `$GOPATH` - that's where all your source code lives, if not set it `$HOME/go`
+- `$GOPATH` - that's where all your source code lives, if not set defaults to `$HOME/go`
 - all your code is stored in packages
-- the `main` package is special - it indicates a package where an exutable program is stored and can't be accessed from other packages
+- the `main` package is special - it indicates a package where an executable program is stored and can't be accessed from other packages
 - that's why it's common to have a directory called `cmd` with the package `main`
 - package name and directory name are not related (directory `foo` can contain package `bar`)
+- code in a package can be split in many files
 - unlike Java in Go there's not many packages
 - some use monorepo (company wide) yet you're free to choose
 
 * Recommended program structure
 
-- to treat you application as a library you can follow this structure
+- to treat your application as a library you can follow this structure
 .code structure.md
 
 * What's in Go that's not in Java
@@ -111,6 +112,7 @@ https://go.ondralinek.cz
 
 - Types can have receivers
 - They are similar to methods expect the `this` keyword is defined explicitely
+- Receiver can be assigned within the package only
 - Receivers are value or pointer based
 - It's much more usual to work with pointers
 
